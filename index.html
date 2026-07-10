@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rezuan Social</title>
+<style>
+body{font-family:Arial;background:#f0f2f5;margin:0}
+.navbar{background:white;padding:15px;text-align:right}
+button{padding:10px 20px;background:#1877f2;color:white;border:0;border-radius:10px}
+.profile{max-width:900px;margin:30px auto;background:white;border-radius:20px;overflow:hidden;padding-bottom:20px}
+.cover{height:300px;background:linear-gradient(45deg,#1877f2,#00c6ff)}
+.profile-info{text-align:center;margin-top:-70px}
+.profile-info img{width:150px;height:150px;border-radius:50%;border:5px solid white;object-fit:cover}
+.social{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;padding:30px}
+.card{background:#f8f9fa;padding:20px;text-align:center;border-radius:15px}
+.removeBtn{display:none;background:red}
+.admin .removeBtn{display:inline-block}
+.note-box{display:none;padding:30px}
+.admin .note-box{display:block}
+#publicNote{padding:30px}
+textarea{width:100%;height:150px}
+</style>
+</head>
+<body>
+<div class="navbar">
+<button onclick="adminLogin()">Admin</button>
+<button id="editBtn" style="display:none" onclick="editProfile()">Edit</button>
+<button id="addBtn" style="display:none" onclick="addSocial()">Add</button>
+</div>
+
+<div class="profile" id="profile">
+<div class="cover"></div>
+<div class="profile-info">
+<img id="avatar" src="fb.jpeg">
+<h1 id="websiteName">REZUAN SOCIAL</h1>
+<a id="profileLink" href="https://facebook.com"><h2 id="name">Re Zu AN</h2></a>
+<p id="bio">Web Developer | Gamer</p>
+</div>
+
+<div class="social" id="socialContainer"></div>
+
+<div id="publicNote"><h2>Notes</h2><p id="showNote"></p></div>
+
+<div class="note-box">
+<h2>Edit Notes</h2>
+<textarea id="notes" oninput="saveNotes()"></textarea>
+</div>
+</div>
+
+<script>
+let isAdmin=false;
+
+function adminLogin(){
+let id=prompt("User ID"),pass=prompt("Password");
+if(id=="nipun"&&pass=="rezuan016"){
+isAdmin=true;
+profile.classList.add("admin");
+editBtn.style.display="inline-block";
+addBtn.style.display="inline-block";
+alert("Admin Login Success");
+}else alert("Wrong ID or Password");
+}
+
+function addSocial(){
+let s=prompt("Social Name"),d=prompt("Display Name"),l=prompt("Link");
+if(!s||!d)return;
+socialContainer.innerHTML+=`<div class="card"><h3 title="Social Media">${s}</h3><a href="${l}" target="_blank">${d}</a><br><button class="removeBtn" onclick="removeSocial(this)">Remove</button></div>`;
+saveSocial();
+}
+function removeSocial(x){x.parentElement.remove();saveSocial()}
+function saveSocial(){localStorage.socials=socialContainer.innerHTML}
+function saveNotes(){localStorage.notes=notes.value;showNote.innerText=notes.value}
+
+function editProfile(){
+let x=prompt("Website Name",websiteName.innerText);
+if(x)websiteName.innerText=x;
+}
+
+window.onload=()=>{
+if(localStorage.socials)socialContainer.innerHTML=localStorage.socials;
+else{
+socialContainer.innerHTML=`<div class="card"><h3>Facebook</h3><a href="https://facebook.com">Re Zu AN</a><br><button class="removeBtn" onclick="removeSocial(this)">Remove</button></div>`;
+}
+if(localStorage.notes){notes.value=localStorage.notes;showNote.innerText=localStorage.notes}
+}
+</script>
+</body>
+</html>
